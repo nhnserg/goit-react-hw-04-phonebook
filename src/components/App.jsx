@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ContactForm from "./ContactForm/ContactForm";
 import ContactList from "./ContactList/ContactList";
 import styles from "./App.module.css";
 
 export const App = () => {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(() => {
+    const storedContacts = localStorage.getItem("contacts");
+    return storedContacts ? JSON.parse(storedContacts) : [];
+  });
+
   const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem("contacts", JSON.stringify(contacts));
+  }, [contacts]);
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
